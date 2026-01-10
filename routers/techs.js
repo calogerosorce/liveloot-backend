@@ -6,6 +6,10 @@ const connection = require('../database/connection')
 
 router.get('/', techsControl.index)
 
+router.get('/all', techsControl.indexAll)
+
 router.get('/:slug', techsControl.show)
+
+
 
 module.exports = router
