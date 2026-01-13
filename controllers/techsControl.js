@@ -49,7 +49,6 @@ const indexAll = (req, res) => {
     })
 }
 
-
 module.exports = {
     index,
     show,
