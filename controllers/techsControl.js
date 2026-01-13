@@ -39,6 +39,36 @@ const show = async (req, res) => {
     }
 };
 
+const showSingle = async (req, res) => {
+    try {
+        const rawSlug = req.params.slug || '';
+        const slug = decodeURIComponent(rawSlug).trim();
+        const id = parseInt(req.params.id, 10);
+
+        if (!id) return res.status(400).json({ error: 'ID prodotto non valido' });
+
+        const sqlCategory = 'SELECT id FROM categories WHERE LOWER(slug) = LOWER(?) LIMIT 1';
+        const [catRows] = await connection.promise().query(sqlCategory, [slug]);
+
+        if (!catRows || catRows.length === 0) {
+            return res.status(404).json({ error: 'Categoria non trovata' });
+        }
+
+        const categoryId = catRows[0].id;
+
+        const sqlProduct = 'SELECT id, title, brand, price, description, image, slug FROM products WHERE id = ? AND category_id = ? LIMIT 1';
+        const [prodRows] = await connection.promise().query(sqlProduct, [id, categoryId]);
+
+        if (!prodRows || prodRows.length === 0) {
+            return res.status(404).json({ error: 'Prodotto non trovato' });
+        }
+
+        return res.json(prodRows[0]);
+    } catch (err) {
+        return res.status(500).json({ error: err.message });
+    }
+}
+
 const indexAll = (req, res) => {
 
     const sql = 'SELECT products.id, products.category_id, products.brand, products.title, products.price, products.description, products.image, categories.name, categories.slug, categories.description AS category_description FROM products JOIN categories ON category_id = categories.id'
@@ -52,5 +82,6 @@ const indexAll = (req, res) => {
 module.exports = {
     index,
     show,
-    indexAll
+    indexAll,
+    showSingle
 }

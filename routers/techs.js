@@ -10,6 +10,8 @@ router.get('/all', techsControl.indexAll)
 
 router.get('/:slug', techsControl.show)
 
+router.get('/:slug/:id', techsControl.showSingle)
+
 
 
 module.exports = router
