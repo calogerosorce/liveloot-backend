@@ -10,7 +10,7 @@ router.get('/all', techsControl.indexAll)
 
 router.get('/:slug', techsControl.show)
 
-router.get('/:slug/:id', techsControl.showSingle)
+router.get('/:slug/:slug_product', techsControl.showSingle)
 
 
 

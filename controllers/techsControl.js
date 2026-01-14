@@ -28,7 +28,7 @@ const show = async (req, res) => {
 
         const category = rows[0];
 
-        const sqlProducts = 'SELECT id, title, brand, price, description, image, slug FROM products WHERE category_id = ?';
+        const sqlProducts = 'SELECT id, title, brand, price, description, image, slug_product AS slug FROM products WHERE category_id = ?';
         const [products] = await connection.promise().query(sqlProducts, [category.id]);
 
         category.tag = products || [];
@@ -41,14 +41,16 @@ const show = async (req, res) => {
 
 const showSingle = async (req, res) => {
     try {
-        const rawSlug = req.params.slug || '';
-        const slug = decodeURIComponent(rawSlug).trim();
-        const id = parseInt(req.params.id, 10);
+        const rawCategorySlug = req.params.slug || '';
+        const categorySlug = decodeURIComponent(rawCategorySlug).trim();
 
-        if (!id) return res.status(400).json({ error: 'ID prodotto non valido' });
+        const rawProductSlug = req.params.slug_product || '';
+        const productSlug = decodeURIComponent(rawProductSlug).trim();
+
+        if (!productSlug) return res.status(400).json({ error: 'Slug prodotto non valido' });
 
         const sqlCategory = 'SELECT id FROM categories WHERE LOWER(slug) = LOWER(?) LIMIT 1';
-        const [catRows] = await connection.promise().query(sqlCategory, [slug]);
+        const [catRows] = await connection.promise().query(sqlCategory, [categorySlug]);
 
         if (!catRows || catRows.length === 0) {
             return res.status(404).json({ error: 'Categoria non trovata' });
@@ -56,8 +58,8 @@ const showSingle = async (req, res) => {
 
         const categoryId = catRows[0].id;
 
-        const sqlProduct = 'SELECT id, title, brand, price, description, image, slug FROM products WHERE id = ? AND category_id = ? LIMIT 1';
-        const [prodRows] = await connection.promise().query(sqlProduct, [id, categoryId]);
+        const sqlProduct = 'SELECT id, title, brand, price, description, image, slug_product AS slug FROM products WHERE LOWER(slug_product) = LOWER(?) AND category_id = ? LIMIT 1';
+        const [prodRows] = await connection.promise().query(sqlProduct, [productSlug, categoryId]);
 
         if (!prodRows || prodRows.length === 0) {
             return res.status(404).json({ error: 'Prodotto non trovato' });
