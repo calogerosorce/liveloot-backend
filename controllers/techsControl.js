@@ -88,7 +88,7 @@ const searchProducts = async (req, res) => {
         let sort = req.query.sort;       // 'asc' o 'desc'
 
         let sql = `
-            SELECT *
+            SELECT products.id, products.category_id, products.brand, products.title, products.price, products.description, products.image, products.slug_product, categories.name, categories.slug, categories.description AS category_description
             FROM products
             JOIN categories ON products.category_id = categories.id
         `;
