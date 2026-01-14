@@ -73,7 +73,7 @@ const showSingle = async (req, res) => {
 
 const indexAll = (req, res) => {
 
-    const sql = 'SELECT products.id, products.category_id, products.brand, products.title, products.price, products.description, products.image, categories.name, categories.slug, categories.description AS category_description FROM products JOIN categories ON category_id = categories.id'
+    const sql = 'SELECT products.id, products.category_id, products.brand, products.title, products.price, products.description, products.image, products.slug_product, categories.name, categories.slug, categories.description AS category_description FROM products JOIN categories ON category_id = categories.id'
 
     connection.query(sql, (err, results) => {
         if (err) return res.status(500).json({ error: true, message: err.message })
