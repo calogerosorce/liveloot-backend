@@ -81,9 +81,68 @@ const indexAll = (req, res) => {
     })
 }
 
+const searchProducts = async (req, res) => {
+    try {
+        const products = req.query.q;
+        const sortBy = req.query.sortBy; // 'price', 'title' o 'created_at'
+        let sort = req.query.sort;       // 'asc' o 'desc'
+
+        let sql = `
+            SELECT *
+            FROM products
+            JOIN categories ON products.category_id = categories.id
+        `;
+        const params = [];
+
+        // Filtro per ricerca
+        if (products && products.trim() !== "") {
+            sql += `
+                WHERE LOWER(categories.slug) LIKE CONCAT('%', ?, '%')
+                   OR LOWER(products.slug_product) LIKE CONCAT('%', ?, '%')
+            `;
+            params.push(products, products);
+        }
+
+        // Ordinamento condizionale
+        if (sortBy && (sortBy === 'price' || sortBy === 'title' || sortBy === 'created_at')) {
+
+            // default sort direction = ASC
+            if (!sort || (sort.toLowerCase() !== 'asc' && sort.toLowerCase() !== 'desc')) {
+                sort = 'asc';
+            }
+
+            if (sortBy === 'title') {
+                sql += ` ORDER BY LOWER(title) ${sort.toUpperCase()}`;
+            } else if (sortBy === 'price') {
+                sql += ` ORDER BY price ${sort.toUpperCase()}`;
+            } else if (sortBy === 'created_at') {
+                sql += ` ORDER BY created_at ${sort.toUpperCase()}`;
+            }
+        }
+
+        const [rows] = await connection.promise().query(sql, params);
+
+        res.json({
+            success: true,
+            total: rows.length,
+            data: rows
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ success: false });
+    }
+};
+
+
+
+
+
+
 module.exports = {
     index,
     show,
     indexAll,
-    showSingle
+    showSingle,
+    searchProducts
 }

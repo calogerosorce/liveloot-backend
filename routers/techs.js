@@ -6,6 +6,8 @@ const connection = require('../database/connection')
 
 router.get('/', techsControl.index)
 
+router.get('/products', techsControl.searchProducts)
+
 router.get('/all', techsControl.indexAll)
 
 router.get('/:slug', techsControl.show)
