@@ -1,7 +1,6 @@
-function errorServer(err, req, res, next) {
-    res.status(500)
-    res.json({
-        error: err.message,
-    });
-};
-module.exports = errorServer;
+function serverError(err, req, res, next) {
+    console.error(err && err.stack ? err.stack : err);
+    res.status(500).json({ error: err && err.message ? err.message : 'Internal Server Error' });
+}
+
+module.exports = serverError;
