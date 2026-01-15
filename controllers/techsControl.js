@@ -3,6 +3,7 @@ const connection = require('../database/connection')
 const Stripe = require('stripe')
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const { sendMail } = require("../services/mailer");
+const e = require('express');
 
 const index = (req, res) => {
 
@@ -171,9 +172,61 @@ const makePayment = async (req, res) => {
     }
 };
 
+const order = (req, res) => {
+    console.log('Request body:', req.body);
 
+    const { name, lastname, email, number, address, country, city, province, postalCode, notes, total_price, products } = req.body;
 
+    // Validazione dei campi richiesti
+    if (!name || !lastname || !email || !number || !address || !country || !city || !province || !postalCode || !total_price || !Array.isArray(products) || products.length === 0) {
+        return res.status(400).json({
+            error: true,
+            message: 'Campi obbligatori mancanti: name, lastname, email',
+            received: { name, lastname, email }
+        });
+    }
 
+    const storeBuyerSql = `INSERT INTO orders
+                        (name, lastname, email, number, address, country, city, province, postal_code, notes, total_price)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
+    const buyerValues = [name, lastname, email, number, address, country, city, province, postalCode, notes, total_price];
+
+    connection.query(storeBuyerSql, buyerValues, (err, orderResult) => {
+        if (err) {
+            return res.status(500).json({ error: true, message: err.message });
+        }
+
+        const orderId = orderResult.insertId;
+
+        // Inserimento prodotti nella tabella product_order
+        const storeProductsOrderSql = `INSERT INTO product_order
+            (product_id, order_id, product_quantity, product_price)
+            VALUES ?`;
+
+        // Prepara i valori per l'inserimento multiplo
+        const productValues = products.map(product => [
+            product.id,
+            orderId,
+            product.quantity,
+            product.price
+        ]);
+
+        connection.query(storeProductsOrderSql, [productValues], (err, productResult) => {
+            if (err) {
+                console.error('Errore durante l\'inserimento dei prodotti nell\'ordine:', err);
+                return res.status(500).json({ error: true, message: 'Ordine creato ma errore nell\'inserimento prodotti: ' + err.message });
+            }
+
+            res.status(201).json({
+                message: "Order created successfully",
+                orderId: orderId,
+                productsInserted: productResult.affectedRows
+            });
+        });
+    });
+
+}
 
 module.exports = {
     index,
@@ -181,5 +234,6 @@ module.exports = {
     indexAll,
     showSingle,
     searchProducts,
-    makePayment
+    makePayment,
+    order
 }
