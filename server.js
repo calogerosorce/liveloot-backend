@@ -5,6 +5,8 @@ const PORT = 3000
 const techsRoute = require('./routers/techs')
 const errorServer = require('./middlewares/serverError')
 const notFound = require('./middlewares/notFound')
+const Stripe = require('stripe')
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 app.use(cors({ origin: 'http://localhost:5173' }))
 
