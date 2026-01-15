@@ -10,11 +10,12 @@ router.get('/products', techsControl.searchProducts)
 
 router.get('/all', techsControl.indexAll)
 
+router.post("/create-checkout-session", techsControl.makePayment)
+
 router.get('/:slug', techsControl.show)
 
 router.get('/:slug/:slug_product', techsControl.showSingle)
 
-router.post("/create-payment-intent", techsControl.makePayment)
 
 
 
