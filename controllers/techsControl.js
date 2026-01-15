@@ -2,6 +2,7 @@ const { text } = require('express')
 const connection = require('../database/connection')
 const Stripe = require('stripe')
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const { sendMail } = require("../services/mailer");
 
 const index = (req, res) => {
 
@@ -137,21 +138,37 @@ const searchProducts = async (req, res) => {
 };
 
 const makePayment = async (req, res) => {
-    const { items } = req.body;
+    try {
+        const { items, email } = req.body;
 
-    // Create a PaymentIntent with the order amount and currency
-    const paymentIntent = await stripe.paymentIntents.create({
-        //DA INSERIRE QUI amount: ,
-        currency: "eur",
-        // In the latest version of the API, specifying the `automatic_payment_methods` parameter is optional because Stripe enables its functionality by default.
-        automatic_payment_methods: {
-            enabled: true,
-        },
-    });
+        const paymentIntent = await stripe.paymentIntents.create({
+            // amount: DA CALCOLARE
+            currency: "eur",
+            automatic_payment_methods: {
+                enabled: true,
+            },
+        });
 
-    res.send({
-        clientSecret: paymentIntent.client_secret,
-    });
+        // ✅ INVIO EMAIL CON MAILTRAP
+        await sendMail({
+            to: email || "test@mail.com",
+            subject: "Pagamento avviato",
+            text: "Il tuo pagamento è stato avviato correttamente.",
+            html: `
+                <h2>Pagamento avviato</h2>
+                <p>Il pagamento è stato creato con successo.</p>
+                <p><strong>ID:</strong> ${paymentIntent.id}</p>
+            `
+        });
+
+        res.send({
+            clientSecret: paymentIntent.client_secret,
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Errore nel pagamento" });
+    }
 };
 
 
