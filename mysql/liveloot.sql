@@ -63,12 +63,12 @@ CREATE TABLE `orders` (
   `city` varchar(45) NOT NULL,
   `province` varchar(45) NOT NULL,
   `postal_code` varchar(5) NOT NULL,
-  `notes` varchar(255) NOT NULL,
+  `notes` varchar(255) DEFAULT NULL,
   `total_price` decimal(10,2) DEFAULT NULL,
   `create_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -77,6 +77,7 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
+INSERT INTO `orders` VALUES (1,'Diego','Tosato','tosato1998@gmail.com','3482965020','Largo Amerigo Vespucci, 26','Italia','Zero Branco','TV','31059','canide',0.00,'2026-01-15 17:27:51','2026-01-15 17:27:51'),(2,'Diego','Tosato','tosato1998@gmail.com','3482965020','Largo Amerigo Vespucci, 26','Italia','Zero Branco','TV','31059','canide',0.00,'2026-01-15 17:27:56','2026-01-15 17:27:56'),(3,'Diego','Tosato','tosato1998@gmail.com','3482965020','Largo Amerigo Vespucci, 26','Italia','Zero Branco','TV','31059','canide',54.89,'2026-01-15 17:53:24','2026-01-15 17:53:24'),(4,'Diego','Tosato','tosato1998@gmail.com','3482965020','Largo Amerigo Vespucci, 26','Italia','Zero Branco','TV','31059','canide',54.89,'2026-01-15 17:55:05','2026-01-15 17:55:05'),(5,'Diego','Tosato','tosato1998@gmail.com','3482965020','Largo Amerigo Vespucci, 26','Italia','Zero Branco','TV','31059','canide',54.89,'2026-01-15 17:55:30','2026-01-15 17:55:30'),(6,'Diego','Tosato','tosato1998@gmail.com','3482965020','Largo Amerigo Vespucci, 26','Italia','Zero Branco','TV','31059','canide',54.89,'2026-01-15 18:01:48','2026-01-15 18:01:48'),(7,'Diego','Tosato','tosato1998@gmail.com','3482965020','Largo Amerigo Vespucci, 26','Italia','Zero Branco','TV','31059','',1675.99,'2026-01-15 18:02:47','2026-01-15 18:02:47'),(8,'Diego','Tosato','tosato1998@gmail.com','3482965020','Largo Amerigo Vespucci, 26','Italia','Zero Branco','TV','31059','',1266.60,'2026-01-15 18:08:42','2026-01-15 18:08:42'),(9,'Diego','Tosato','tosato1998@gmail.com','3482965020','Largo Amerigo Vespucci, 26','Italia','Zero Branco','TV','31059','canide',74.49,'2026-01-15 18:25:16','2026-01-15 18:25:16');
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -105,6 +106,7 @@ CREATE TABLE `product_order` (
 
 LOCK TABLES `product_order` WRITE;
 /*!40000 ALTER TABLE `product_order` DISABLE KEYS */;
+INSERT INTO `product_order` VALUES (1,7,1,79.99),(2,6,1,49.90),(3,9,1,69.50),(5,8,1,99.00),(13,8,1,69.90),(17,7,1,499.00),(21,8,1,69.90),(27,8,1,249.00),(30,7,2,99.00),(33,8,1,39.90),(40,8,1,39.90),(42,7,1,899.00),(45,8,1,699.00);
 /*!40000 ALTER TABLE `product_order` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -145,6 +147,10 @@ UNLOCK TABLES;
 --
 -- Dumping events for database 'liveloot'
 --
+
+--
+-- Dumping routines for database 'liveloot'
+--
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -155,4 +161,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-01-15 16:57:56
+-- Dump completed on 2026-01-15 19:27:12
