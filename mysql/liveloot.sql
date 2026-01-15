@@ -59,6 +59,11 @@ CREATE TABLE `orders` (
   `email` varchar(255) NOT NULL,
   `number` varchar(12) NOT NULL,
   `address` varchar(255) NOT NULL,
+  `country` varchar(45) NOT NULL,
+  `city` varchar(45) NOT NULL,
+  `province` varchar(45) NOT NULL,
+  `postal_code` varchar(5) NOT NULL,
+  `notes` varchar(255) NOT NULL,
   `total_price` decimal(10,2) DEFAULT NULL,
   `create_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -140,10 +145,6 @@ UNLOCK TABLES;
 --
 -- Dumping events for database 'liveloot'
 --
-
---
--- Dumping routines for database 'liveloot'
---
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -154,4 +155,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-01-14 18:07:10
+-- Dump completed on 2026-01-15 16:57:56
