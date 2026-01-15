@@ -12,8 +12,6 @@ router.get('/all', techsControl.indexAll)
 
 router.post('/carrello/pagamento', techsControl.order)
 
-router.post("/create-checkout-session", techsControl.makePayment)
-
 router.get('/:slug', techsControl.show)
 
 router.get('/:slug/:slug_product', techsControl.showSingle)

@@ -87,7 +87,7 @@ const indexAll = (req, res) => {
 
 const searchProducts = async (req, res) => {
     try {
-        const products = req.query.q;
+        const products = req.query.search;
         const sortBy = req.query.sortBy; // 'price', 'title' o 'created_at'
         let sort = req.query.sort;       // 'asc' o 'desc'
 
@@ -138,41 +138,9 @@ const searchProducts = async (req, res) => {
     }
 };
 
-const makePayment = async (req, res) => {
-    try {
-        const { items, email } = req.body;
 
-        const paymentIntent = await stripe.paymentIntents.create({
-            // amount: DA CALCOLARE
-            currency: "eur",
-            automatic_payment_methods: {
-                enabled: true,
-            },
-        });
 
-        // ✅ INVIO EMAIL CON MAILTRAP
-        await sendMail({
-            to: email || "test@mail.com",
-            subject: "Pagamento avviato",
-            text: "Il tuo pagamento è stato avviato correttamente.",
-            html: `
-                <h2>Pagamento avviato</h2>
-                <p>Il pagamento è stato creato con successo.</p>
-                <p><strong>ID:</strong> ${paymentIntent.id}</p>
-            `
-        });
-
-        res.send({
-            clientSecret: paymentIntent.client_secret,
-        });
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Errore nel pagamento" });
-    }
-};
-
-const order = (req, res) => {
+const order = async (req, res) => {
     console.log('Request body:', req.body);
 
     const { name, lastname, email, number, address, country, city, province, postalCode, notes, total_price, products } = req.body;
@@ -185,6 +153,39 @@ const order = (req, res) => {
             received: { name, lastname, email }
         });
     }
+
+
+
+    /* const paymentIntent = await stripe.paymentIntents.create({
+        // amount: DA CALCOLARE
+        currency: "eur",
+        automatic_payment_methods: {
+            enabled: true,
+        },
+    }); */
+
+    // ✅ INVIO EMAIL CON MAILTRAP
+    await sendMail({
+        to: email || "test@mail.com",
+        subject: "Pagamento avviato",
+        text: "Il tuo pagamento è stato avviato correttamente.",
+        html: `
+                <h2>Pagamento avviato</h2>
+                <p>Il pagamento è stato creato con successo.</p>
+            `
+
+
+    });
+
+
+    /*   res.send({
+          clientSecret: paymentIntent.client_secret,
+      });
+
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Errore nel pagamento" });
+  } */
 
     const storeBuyerSql = `INSERT INTO orders
                         (name, lastname, email, number, address, country, city, province, postal_code, notes, total_price)
@@ -234,6 +235,5 @@ module.exports = {
     indexAll,
     showSingle,
     searchProducts,
-    makePayment,
     order
 }
