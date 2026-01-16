@@ -230,7 +230,11 @@ const order = async (req, res) => {
 }
 
 const recent = (req, res) => {
-    const lastThreeSql = `SELECT * FROM products ORDER BY products.created_at DESC`
+    const lastThreeSql = `SELECT products.id, products.category_id, products.brand, products.title, products.price, products.description, products.image, products.created_at, products.slug_product, categories.name, categories.slug, categories.description AS category_description
+FROM products
+JOIN categories
+ON category_id = categories.id
+ORDER BY created_at DESC`
 
     connection.query(lastThreeSql, (err, results) => {
         if (err) return res.status(500).json({ error: true, message: err.message })
