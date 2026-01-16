@@ -10,6 +10,8 @@ router.get('/products', techsControl.searchProducts)
 
 router.get('/all', techsControl.indexAll)
 
+router.get('/recent', techsControl.recent)
+
 router.post('/carrello/pagamento', techsControl.order)
 
 router.get('/:slug', techsControl.show)

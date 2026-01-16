@@ -229,11 +229,21 @@ const order = async (req, res) => {
 
 }
 
+const recent = (req, res) => {
+    const lastThreeSql = `SELECT * FROM products ORDER BY products.created_at DESC`
+
+    connection.query(lastThreeSql, (err, results) => {
+        if (err) return res.status(500).json({ error: true, message: err.message })
+        res.json(results.slice(0, 3))
+    })
+}
+
 module.exports = {
     index,
     show,
     indexAll,
     showSingle,
     searchProducts,
-    order
+    order,
+    recent
 }
