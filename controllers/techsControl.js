@@ -150,7 +150,7 @@ const order = async (req, res) => {
         return res.status(400).json({
             error: true,
             message: 'Campi obbligatori mancanti: name, lastname, email',
-            received: { name, lastname, email }
+            received: { name, lastname, email, number, address, country, city, province, postalCode, total_price, products }
         });
     }
 
