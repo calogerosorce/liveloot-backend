@@ -141,18 +141,18 @@ const searchProducts = async (req, res) => {
 
 
 const order = async (req, res) => {
-    console.log('Request body:', req.body);
-
-    const { name, lastname, email, number, address, country, city, province, postalCode, notes, total_price, products } = req.body;
+    const { name, lastname, email, number, address, country, city, province, postalCode, notes, products } = req.body;
 
     // Validazione dei campi richiesti
-    if (!name || !lastname || !email || !number || !address || !country || !city || !province || !postalCode || !total_price || !Array.isArray(products) || products.length === 0) {
+    if (!name || !lastname || !email || !number || !address || !country || !city || !province || !postalCode || !Array.isArray(products) || products.length === 0) {
         return res.status(400).json({
             error: true,
             message: 'Campi obbligatori mancanti: name, lastname, email',
-            received: { name, lastname, email, number, address, country, city, province, postalCode, total_price, products }
+            received: { name, lastname, email, number, address, country, city, province, postalCode, products }
         });
     }
+
+
 
 
 
@@ -191,7 +191,15 @@ const order = async (req, res) => {
                         (name, lastname, email, number, address, country, city, province, postal_code, notes, total_price)
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
+    let total_price = 0;
+    products.forEach(product => {
+        const productTotal = product.price * product.quantity;
+        total_price += productTotal;
+    });
+
     const buyerValues = [name, lastname, email, number, address, country, city, province, postalCode, notes, total_price];
+    console.log(buyerValues);
+
 
     connection.query(storeBuyerSql, buyerValues, (err, orderResult) => {
         if (err) {
