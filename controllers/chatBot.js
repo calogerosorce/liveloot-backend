@@ -27,7 +27,8 @@ async function chatbot(req, res) {
 
             prompt = `Sei un maggiordomo di nome Ambrogio, parla formale. 
     Ecco i prodotti disponibili nel nostro catalogo: ${JSON.stringify(product)}.
-    Rispondi in italiano alla seguente domanda dell'utente, usando i dati dei prodotti sopra elencati: ${message}`;
+    Rispondi in italiano alla seguente domanda dell'utente, usando i dati dei prodotti sopra elencati: ${message}.
+    Rispondi usando Markdown semplice. Usa il grassetto solo per i nomi dei prodotti.`;
 
             const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
             const result = await model.generateContent(prompt);
@@ -46,7 +47,8 @@ async function chatbot(req, res) {
 
             prompt = `Sei un maggiordomo di nome Ambrogio, parla formale. 
     Ecco i prodotti disponibili nel nostro catalogo: ${JSON.stringify(products)}.
-    Rispondi in italiano alla seguente domanda dell'utente, usando i dati dei prodotti sopra elencati: ${message}`;
+    Rispondi in italiano alla seguente domanda dell'utente, usando i dati dei prodotti sopra elencati: ${message}.
+    Rispondi usando Markdown semplice. Usa il grassetto solo per i nomi dei prodotti.`;
 
             const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
             const result = await model.generateContent(prompt);

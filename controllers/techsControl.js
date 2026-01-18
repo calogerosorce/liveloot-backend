@@ -167,14 +167,28 @@ const order = async (req, res) => {
     // ✅ INVIO EMAIL CON MAILTRAP
     await sendMail({
         to: email || "test@mail.com",
-        subject: "Pagamento avviato",
-        text: "Il tuo pagamento è stato avviato correttamente.",
+        subject: "Conferma Pagamento - LiveLoot",
+        text: "Grazie per il tuo ordine. Il tuo pagamento è stato ricevuto e sarà elaborato a breve.",
         html: `
-                <h2>Pagamento avviato</h2>
-                <p>Il pagamento è stato creato con successo.</p>
-            `
-
-
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <h2 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px;">
+                    Conferma Pagamento
+                </h2>
+                <p style="font-size: 16px; color: #34495e; line-height: 1.6;">
+                    Gentile cliente,
+                </p>
+                <p style="font-size: 16px; color: #34495e; line-height: 1.6;">
+                    Grazie per il tuo ordine. Il tuo pagamento è stato ricevuto correttamente e sarà elaborato a breve.
+                </p>
+                <p style="font-size: 16px; color: #34495e; line-height: 1.6;">
+                    Ti invieremo un'ulteriore conferma non appena la transazione sarà completata.
+                </p>
+                <p style="font-size: 14px; color: #7f8c8d; margin-top: 30px;">
+                    Cordiali saluti,<br>
+                    <strong>Il team di LiveLoot</strong>
+                </p>
+            </div>
+        `
     });
 
 
