@@ -18,7 +18,7 @@ router.get('/:slug', techsControl.show)
 
 router.get('/:slug/:slug_product', techsControl.showSingle)
 
-
+router.post('/create-payment-intent', techsControl.paymentIntent)
 
 
 module.exports = router
